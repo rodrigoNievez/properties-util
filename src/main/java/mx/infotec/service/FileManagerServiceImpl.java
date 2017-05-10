@@ -1,15 +1,19 @@
 package mx.infotec.service;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.Scanner;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Properties;
+import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,40 +21,60 @@ import org.springframework.stereotype.Service;
 public class FileManagerServiceImpl implements FileManagerService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileManagerServiceImpl.class);
-	private static final String EQUALS = "=";
+	
+	@Value("${updated.comment}")
+	private String updatedComment;
 
 	@Override
-	public Map<String, String> getProperties(String file) {
-		ResourceBundle bundle = ResourceBundle.getBundle(file);
-		Map<String, String> properties = null;
+	public Properties getProperties(String file) {
 		File propertiesFile = new File(file);
-		Scanner fileScanner = null;
-		try {
-			if (propertiesFile.exists()) {
-				fileScanner = new Scanner(propertiesFile);
-				properties = new HashMap<>();
-				while (fileScanner.hasNextLine()) {
-					String[] values = fileScanner.nextLine().split(EQUALS,2);
-					properties.put(values[0].trim(), values[1].trim());
-				}
-			} else {
-				LOGGER.info("El archivo de origen, no existe");
+		Properties properties = null;
+		FileInputStream fileInput = null;
+		if (propertiesFile.exists()) {
+			try {
+				fileInput = new FileInputStream(propertiesFile);
+				properties = new Properties();
+				properties.load(fileInput);
+				fileInput.close();
+			} catch (FileNotFoundException e) {
+				LOGGER.error("Error al leer el archivo, causa: ", e);
+			} catch (IOException e) {
+				LOGGER.error("Error al leer las propiedades, causa: ", e);
 			}
-
-		} catch (FileNotFoundException e) {
-			LOGGER.error("No se encontro el archivo, causa: ", e);
-		} finally {
-			if (fileScanner != null)
-				fileScanner.close();
 		}
-
+		
 		return properties;
 	}
 
 	@Override
-	public boolean writeFile() {
-		// TODO Auto-generated method stub
+	public boolean writeFile(Properties properties, String outputFile) {
+		File file = new File(outputFile);		
+		try {
+			FileOutputStream fileOutput = new FileOutputStream(file);
+			Properties sortedProperties = sortProperties(properties);
+			sortedProperties.store(fileOutput, updatedComment);
+			fileOutput.close();
+			return true;
+		} catch (FileNotFoundException e) {
+			LOGGER.error("Error al leer el archivo, causa: ", e);
+		} catch (IOException e) {
+			LOGGER.error("Error al guardar el archivo de propiedades, causa: ", e);
+		} 
+
 		return false;
+	}
+	
+	private Properties sortProperties(Properties properties) {
+		Properties sortedProperties = new Properties() {
+			private static final long serialVersionUID = 1L;
+
+			@Override 
+			public synchronized Enumeration<Object> keys() {
+				return Collections.enumeration(new TreeSet<Object>(super.keySet()));
+			}
+		};
+		sortedProperties.putAll(properties);
+		return sortedProperties;
 	}
 
 }

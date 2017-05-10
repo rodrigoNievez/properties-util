@@ -1,10 +1,10 @@
 package mx.infotec.service;
 
-import java.util.Map;
+import java.util.Properties;
 
 public interface FileManagerService {
 
-	Map<String, String> getProperties(String file);
+	Properties getProperties(String file);
 	
-	boolean writeFile();
+	boolean writeFile(Properties properties, String outputFile);
 }

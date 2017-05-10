@@ -21,16 +21,16 @@ public class FileManagerServiceImplTest {
 	
 	@SuppressWarnings("deprecation")
 	@Test
-	@Ignore
+//	@Ignore
 	public void testManageFiles() {
-		Assert.assertTrue(managePropertiesService.setNewPropertie("llave1","valor3","/home/rodrigo/file.properties"));
+		Assert.assertTrue(managePropertiesService.setNewPropertie("key3.test","value3","/home/rodrigo/file.properties"));
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Test
 	public void testManageFilesUpdate() {
 		
-		Assert.assertTrue(managePropertiesService.updatePropertie("llave3","valor4","/home/rodrigo/file.properties"));
+		Assert.assertTrue(managePropertiesService.updatePropertie("key3.test","value4","/home/rodrigo/file.properties"));
 	}
 
 }

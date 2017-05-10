@@ -2,11 +2,10 @@ package mx.infotec.service;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,70 +22,51 @@ public class ManagePropertiesServiceImpl implements ManagePropertiesService {
 
 	@Override
 	public boolean setNewPropertie(String key, String value, String file) {
-		String addPropertie = String.format("\n%s = %s", key, value);
+		Properties properties = fileManagerService.getProperties(file);
+		if (properties != null) {
 
-		try {
-			Files.write(Paths.get(file), addPropertie.getBytes(), StandardOpenOption.APPEND);
-		} catch (IOException e) {
-			LOGGER.error("Error al insertar o actualizar contenido del archivo, causa: ", e);
-			return false;
+			properties.put(key, value);
+			return fileManagerService.writeFile(properties, file);
+
+		} else {
+			LOGGER.error("No se encontraron propiedades!");
 		}
 
-		return true;
+		return false;
 	}
 
 	@Override
-	public boolean setNewProperties(Map<String, String> properties, String file) {
-		String addPropertie;
-		try {
-			for (Map.Entry<String, String> element : properties.entrySet()) {
-				addPropertie = String.format("\n%s:%s", element.getKey(), element.getValue());
-				Files.write(Paths.get(file), addPropertie.getBytes(), StandardOpenOption.APPEND);
-			}
-		} catch (IOException e) {
-			LOGGER.error("Error al insertar contenido del archivo, causa: ", e);
-			return false;
+	public boolean setNewProperties(Properties putProperties, String file) {
+		Properties properties = fileManagerService.getProperties(file);
+		if (properties != null) {
+			properties.putAll(putProperties);
+			return fileManagerService.writeFile(properties, file);
+		} else {
+			LOGGER.error("No se encontro archivo de propiedades destino");
 		}
-
+		
+		
 		return true;
 	}
 
 	@Override
 	public boolean updatePropertie(String key, String value, String file) {
-		Map<String, String> properties = fileManagerService.getProperties(file);
+		Properties properties = fileManagerService.getProperties(file);
 		if (properties != null) {
-			try {
-				if (properties.containsKey(key)) {
-					String addPropertie = String.format("%s:%s", key, value);
-					Files.setAttribute(Paths.get(file), addPropertie, true);
-				} else {
-					LOGGER.error(String.format("El archivo, no contiene la propiedad %s", key));
-					return false;
-				}
-			} catch (IOException e) {
-				LOGGER.error("Error al insertar o actualizar contenido del archivo, causa: ", e);
-				return false;
+			if (properties.containsKey(key)) {
+				properties.setProperty(key, value);
+				return fileManagerService.writeFile(properties, file);
 			}
-
 		}
+
 		return false;
 	}
 
 	@Override
-	public boolean updateProperties(Map<String, String> properties, String file) {
-		try {
-			for (Map.Entry<String, String> element : properties.entrySet()) {
-				if (properties.containsKey(element.getKey())) {
-					String addPropertie = String.format("%s:%s", element.getKey(), element.getValue());
-					Files.setAttribute(Paths.get(file), addPropertie, true);
-				} else {
-					LOGGER.error(String.format("El archivo, no contiene la propiedad %s", element.getKey()));
-					return false;
-				}
-			}
-		} catch (IOException e) {
-			LOGGER.error("Error al insertar contenido del archivo, causa: ", e);
-			return false;
+	public boolean updateProperties(Properties updatedProperties, String file) {
+		Properties properties = fileManagerService.getProperties(file);
+		for (Map.Entry<Object, Object> elemet : updatedProperties.entrySet()) {
+
 		}
 		return false;
 	}
