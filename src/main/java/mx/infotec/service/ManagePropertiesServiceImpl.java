@@ -2,6 +2,7 @@ package mx.infotec.service;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class ManagePropertiesServiceImpl implements ManagePropertiesService {
 		if (properties != null) {
 			try {
 				if (properties.containsKey(key)) {
-					String addPropertie = String.format("%s=%s", key, value);
+					String addPropertie = String.format("%s:%s", key, value);
 					Files.setAttribute(Paths.get(file), addPropertie, true);
 				} else {
 					LOGGER.error(String.format("El archivo, no contiene la propiedad %s", key));

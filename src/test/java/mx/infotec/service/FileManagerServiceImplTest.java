@@ -23,7 +23,7 @@ public class FileManagerServiceImplTest {
 	@Test
 	@Ignore
 	public void testManageFiles() {
-		Assert.assertTrue(managePropertiesService.setNewPropertie("llave3","valor3","/home/rodrigo/file.properties"));
+		Assert.assertTrue(managePropertiesService.setNewPropertie("llave1","valor3","/home/rodrigo/file.properties"));
 	}
 	
 	@SuppressWarnings("deprecation")
