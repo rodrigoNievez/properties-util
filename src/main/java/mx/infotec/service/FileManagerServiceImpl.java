@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import mx.infotec.exception.PropertiesException;
+
 @Service
 @Qualifier("fileManagerService")
 public class FileManagerServiceImpl implements FileManagerService {
@@ -26,7 +28,7 @@ public class FileManagerServiceImpl implements FileManagerService {
 	private String updatedComment;
 
 	@Override
-	public Properties getProperties(String file) {
+	public Properties getProperties(String file) throws PropertiesException {
 		File propertiesFile = new File(file);
 		Properties properties = null;
 		FileInputStream fileInput = null;
@@ -38,8 +40,10 @@ public class FileManagerServiceImpl implements FileManagerService {
 				fileInput.close();
 			} catch (FileNotFoundException e) {
 				LOGGER.error("Error al leer el archivo, causa: ", e);
+				throw new PropertiesException(e);
 			} catch (IOException e) {
 				LOGGER.error("Error al leer las propiedades, causa: ", e);
+				throw new PropertiesException(e);
 			}
 		}
 		
@@ -47,7 +51,7 @@ public class FileManagerServiceImpl implements FileManagerService {
 	}
 
 	@Override
-	public boolean writeFile(Properties properties, String outputFile) {
+	public boolean writeFile(Properties properties, String outputFile) throws PropertiesException {
 		File file = new File(outputFile);		
 		try {
 			FileOutputStream fileOutput = new FileOutputStream(file);
@@ -57,11 +61,12 @@ public class FileManagerServiceImpl implements FileManagerService {
 			return true;
 		} catch (FileNotFoundException e) {
 			LOGGER.error("Error al leer el archivo, causa: ", e);
+			throw new PropertiesException(e);
 		} catch (IOException e) {
 			LOGGER.error("Error al guardar el archivo de propiedades, causa: ", e);
+			throw new PropertiesException(e);
 		} 
 
-		return false;
 	}
 	
 	private Properties sortProperties(Properties properties) {
