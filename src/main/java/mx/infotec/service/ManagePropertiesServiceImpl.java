@@ -82,4 +82,44 @@ public class ManagePropertiesServiceImpl implements ManagePropertiesService {
 		return false;
 	}
 
+	@Override
+	public boolean setNewPropertiesFromFile(Properties fromProperties, String toFile) {
+		Properties toProperties;
+		try {
+			toProperties = fileManagerService.getProperties(toFile);
+			for (Map.Entry<Object, Object> elemet : fromProperties.entrySet()) {
+				String value = String.valueOf(elemet.getValue());
+				String key = String.valueOf(elemet.getKey());
+				if (!toProperties.containsKey(elemet.getKey())) {
+					toProperties.setProperty(key,value);
+				}
+			}
+			return fileManagerService.writeFile(toProperties, toFile);
+		} catch (PropertiesException e) {
+			LOGGER.error("Error al setear nuevas propiedades, causa: ", e);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean mergeProperties(Properties fromProperties, String toFile) {
+		Properties toProperties;
+		try {
+			toProperties = fileManagerService.getProperties(toFile);
+			for (Map.Entry<Object, Object> elemet : fromProperties.entrySet()) {
+				String value = String.valueOf(elemet.getValue());
+				String key = String.valueOf(elemet.getKey());
+				if (!toProperties.containsKey(elemet.getKey())) {
+					toProperties.setProperty(key,value);
+				} else {
+					toProperties.put(key,value);
+				}
+			}
+			return fileManagerService.writeFile(toProperties, toFile);
+		} catch (PropertiesException e) {
+			LOGGER.error("Error al setear nuevas propiedades, causa: ", e);
+		}
+		return false;
+	}
+
 }

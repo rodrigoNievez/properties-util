@@ -12,7 +12,15 @@ public interface ManagePropertiesFilesService {
 	
 	boolean copyMultiplePropertiesFile(String from, String fileContiner);
 	
-	boolean mergeProperties(String from, String to);
+	boolean updateProperties(String from, String to);
 	
-	boolean mergeMutipleProperties(String from, String fileContiner);
+	boolean updateMutipleProperties(String from, String fileContiner);
+	
+	boolean setNewPropertiesFromFile(String from, String fileContainer);
+	
+	boolean mergePropertiesFromFile(String from, String to);
+	
+	boolean mergeMultiplePropertiesFromFile(String from, String fileContainer);
+	
+	boolean mergeWithSkipProperties(String from, String fileContainter, String skipFile);
 }

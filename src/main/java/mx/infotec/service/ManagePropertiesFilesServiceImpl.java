@@ -106,7 +106,7 @@ public class ManagePropertiesFilesServiceImpl implements ManagePropertiesFilesSe
 	}
 
 	@Override
-	public boolean mergeProperties(String from, String to) {
+	public boolean updateProperties(String from, String to) {
 		Properties properties;
 		try {
 			properties = fileManagerService.getProperties(from);
@@ -118,7 +118,7 @@ public class ManagePropertiesFilesServiceImpl implements ManagePropertiesFilesSe
 	}
 
 	@Override
-	public boolean mergeMutipleProperties(String from, String fileContiner) {
+	public boolean updateMutipleProperties(String from, String fileContiner) {
 		File file = new File(fileContiner);
 		try {
 			Properties properties = fileManagerService.getProperties(from);
@@ -138,6 +138,62 @@ public class ManagePropertiesFilesServiceImpl implements ManagePropertiesFilesSe
 		return false;
 	}
 
+
+	@Override
+	public boolean setNewPropertiesFromFile(String from, String fileContainer) {
+		File file = new File(fileContainer);
+		try {
+			Properties properties = fileManagerService.getProperties(from);
+			Scanner scanner = new Scanner(file);
+			while (scanner.hasNextLine()) {
+				managePropertiesService.setNewPropertiesFromFile(properties, scanner.nextLine());
+			}
+			scanner.close();
+			return true;
+		} catch (FileNotFoundException e) {
+			LOGGER.error("Error al crear el archivo de propiedades, causa: ", e);
+
+		} catch (PropertiesException e) {
+			LOGGER.error("Error al escribir las propiedades, causa: ", e);
+
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean mergePropertiesFromFile(String from, String to) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean mergeMultiplePropertiesFromFile(String from, String fileContainer) {
+		File file = new File(fileContainer);
+		try {
+			Properties properties = fileManagerService.getProperties(from);
+			Scanner scanner = new Scanner(file);
+			while (scanner.hasNextLine()) {
+				managePropertiesService.mergeProperties(properties, scanner.nextLine());
+			}
+			scanner.close();
+			return true;
+		} catch (FileNotFoundException e) {
+			LOGGER.error("Error al crear el archivo de propiedades, causa: ", e);
+
+		} catch (PropertiesException e) {
+			LOGGER.error("Error al escribir las propiedades, causa: ", e);
+
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public boolean mergeWithSkipProperties(String from, String fileContainter, String skipFile) {
+		
+			
+		return false;
+	}
 	private boolean createFile(File file) {
 		file.getParentFile().mkdirs();
 		try {

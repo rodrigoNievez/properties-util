@@ -12,4 +12,8 @@ public interface ManagePropertiesService {
 	
 	boolean updateProperties(Properties updatedProperties, String file);
 	
+	boolean setNewPropertiesFromFile(Properties fromProperties, String toFile);
+	
+	boolean mergeProperties(Properties fromProperties, String toFile);
+	
 }
