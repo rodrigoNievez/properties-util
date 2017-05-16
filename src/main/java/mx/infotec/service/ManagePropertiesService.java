@@ -16,4 +16,6 @@ public interface ManagePropertiesService {
 	
 	boolean mergeProperties(Properties fromProperties, String toFile);
 	
+	boolean mergePropertiesWithSkipProperties(Properties from, Properties skip, String toFile);
+	
 }

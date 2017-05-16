@@ -22,5 +22,5 @@ public interface ManagePropertiesFilesService {
 	
 	boolean mergeMultiplePropertiesFromFile(String from, String fileContainer);
 	
-	boolean mergeWithSkipProperties(String from, String fileContainter, String skipFile);
+	boolean mergeWithSkipProperties(String from, String fileContainer, String skipFile);
 }

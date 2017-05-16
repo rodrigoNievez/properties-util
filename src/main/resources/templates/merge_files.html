@@ -99,10 +99,12 @@
           <h3><i class="mdi-content-send teal-text"></i></h3>
           <h4>TEST FORM2</h4>
           <h1>Form</h1>
-		    <form action="/test" enctype="multipart/form-data" method="post" id="dos">
-		    	<p>From: <input type="file" name="testFile" /></p>
-<!-- 		        <p>Container: <input type="file" name="toFile" /></p> -->
-		        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+		    <form th:action="@{/merge_files}" th:object="${fileModel}" method="post" id="dos">
+		    	<p>From: <input type="file" name="testFile" id="file1"/></p>
+		        <p>Container: <input type="file" name="toFile" id="file2"/></p>
+				<p><input type="hidden" th:field="*{fileFrom}" id="hidden1"/></p>
+				<p><input type="hidden" th:field="*{fileTo}"  id="hidden2"/></p>
+		        <p><input type="submit" value="Submit" onclick="alert(document.getElementById('file1').value)"/> <input type="reset" value="Reset" /></p>
 		    </form>
         </div>
       </div>
@@ -152,6 +154,14 @@
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="js/materialize.js"></script>
   <script src="js/init.js"></script>
-
+  <script type="text/javascript">
+  	function setValues(){
+  		document.getElementById('hidden1').value = document.getElementById('file1').value;
+  		document.getElementById('hidden2').value = document.getElementById('file1').value;
+  		return true;
+  		
+  	}
+  
+  </script>
   </body>
 </html>

@@ -189,10 +189,27 @@ public class ManagePropertiesFilesServiceImpl implements ManagePropertiesFilesSe
 	}
 	
 	@Override
-	public boolean mergeWithSkipProperties(String from, String fileContainter, String skipFile) {
+	public boolean mergeWithSkipProperties(String from, String fileContainer, String skipFile) {
+		File file = new File(fileContainer);
+		try {
+			Properties fromProperties = fileManagerService.getProperties(from);
+			Properties skipProperties = fileManagerService.getProperties(skipFile);
+			Scanner scanner = new Scanner(file);
+			while (scanner.hasNextLine()) {
+				managePropertiesService.mergePropertiesWithSkipProperties(fromProperties, skipProperties, scanner.nextLine());
+			}
+			scanner.close();
+			return true;
+		} catch (FileNotFoundException e) {
+			LOGGER.error("Error al crear el archivo de propiedades, causa: ", e);
+
+		} catch (PropertiesException e) {
+			LOGGER.error("Error al escribir las propiedades, causa: ", e);
+
+		}
 		
-			
 		return false;
+			
 	}
 	private boolean createFile(File file) {
 		file.getParentFile().mkdirs();

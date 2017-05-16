@@ -122,4 +122,29 @@ public class ManagePropertiesServiceImpl implements ManagePropertiesService {
 		return false;
 	}
 
+	@Override
+	public boolean mergePropertiesWithSkipProperties(Properties from, Properties skip, String toFile) {
+		Properties toProperties;
+		try {
+			toProperties = fileManagerService.getProperties(toFile);
+			for (Map.Entry<Object, Object> elemet : from.entrySet()) {
+				String value = String.valueOf(elemet.getValue());
+				String key = String.valueOf(elemet.getKey());
+				if (skip.containsKey(key)) {
+					continue;
+				} else {
+					if (toProperties.containsKey(key)) {
+						toProperties.setProperty(key, value);
+					} else {
+						toProperties.put(key, value);	
+					}
+				}
+			}
+			return fileManagerService.writeFile(toProperties, toFile);
+		} catch (PropertiesException e) {
+			LOGGER.error("Error al setear nuevas propiedades, causa: ", e);
+		}
+		return false;
+	}
+
 }
