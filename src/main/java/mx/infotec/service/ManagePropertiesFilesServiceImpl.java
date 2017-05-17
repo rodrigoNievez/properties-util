@@ -196,7 +196,9 @@ public class ManagePropertiesFilesServiceImpl implements ManagePropertiesFilesSe
 			Properties skipProperties = fileManagerService.getProperties(skipFile);
 			Scanner scanner = new Scanner(file);
 			while (scanner.hasNextLine()) {
-				managePropertiesService.mergePropertiesWithSkipProperties(fromProperties, skipProperties, scanner.nextLine());
+				String line = scanner.nextLine();
+				managePropertiesService.mergePropertiesWithSkipProperties(fromProperties, skipProperties, line);
+//				System.out.println(String.format("RepoUdated: %s", line));
 			}
 			scanner.close();
 			return true;

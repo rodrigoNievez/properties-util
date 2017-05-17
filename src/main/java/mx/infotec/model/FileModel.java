@@ -13,6 +13,8 @@ public class FileModel implements Serializable{
 	
 	private String fileTo;
 
+	private String fileSkip;
+	
 	public String getFileFrom() {
 		return fileFrom;
 	}
@@ -27,6 +29,14 @@ public class FileModel implements Serializable{
 
 	public void setFileTo(String fileTo) {
 		this.fileTo = fileTo;
+	}
+
+	public String getFileSkip() {
+		return fileSkip;
+	}
+
+	public void setFileSkip(String fileSkip) {
+		this.fileSkip = fileSkip;
 	}
 	
 	

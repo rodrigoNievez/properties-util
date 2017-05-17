@@ -133,6 +133,9 @@ public class ManagePropertiesServiceImpl implements ManagePropertiesService {
 				if (skip.containsKey(key)) {
 					continue;
 				} else {
+					if (key.equals("jsp.repositorio.institucion")) {
+						System.out.println(key);
+					}
 					if (toProperties.containsKey(key)) {
 						toProperties.setProperty(key, value);
 					} else {
