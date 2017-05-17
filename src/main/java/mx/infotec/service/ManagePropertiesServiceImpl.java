@@ -127,6 +127,34 @@ public class ManagePropertiesServiceImpl implements ManagePropertiesService {
 		Properties toProperties;
 		try {
 			toProperties = fileManagerService.getProperties(toFile);
+			
+//			Properties faltantes = new Properties();
+//			String resultadoFaltantes = "/home/rodrigo/Desktop/propfaltaltes.properties";
+//			String badPropertie = "itemdep\u00F3sitosponse.subject.reject";
+//			if (toProperties.containsKey(badPropertie)) {
+//				System.out.println(toFile);
+//				toProperties.put("itemdepositosponse.subject.reject", "Solicitud de copia de documento");
+//				toProperties.remove(badPropertie);
+//				System.out.println("new key " + toProperties.getProperty("itemdepositosponse.subject.reject"));
+//				System.out.println("removed? " + !toProperties.containsKey(badPropertie));
+//			}
+//			for (Map.Entry<Object, Object> toElement : toProperties.entrySet()) {
+//				if (!from.containsKey(toElement.getKey())) {
+//					if (!faltantes.containsKey(toElement.getKey())) {
+//						faltantes.put(toElement.getKey(), toElement.getValue());
+//					}
+//				}
+//			}
+	
+//			for (Map.Entry<Object, Object> toElement : from.entrySet()) {
+//				if (String.valueOf(toElement.getValue()).contains("Infotec")) {
+//						faltantes.put(toElement.getKey(), toElement.getValue());
+//					
+//				}
+//			}
+//			
+//			return fileManagerService.writeFile(faltantes, resultadoFaltantes);
+		
 			for (Map.Entry<Object, Object> elemet : from.entrySet()) {
 				String value = String.valueOf(elemet.getValue());
 				String key = String.valueOf(elemet.getKey());
@@ -143,6 +171,9 @@ public class ManagePropertiesServiceImpl implements ManagePropertiesService {
 					}
 				}
 			}
+			
+			System.out.println(String.format("Total de propiedades archivo to: %d", toProperties.size()));
+			
 			return fileManagerService.writeFile(toProperties, toFile);
 		} catch (PropertiesException e) {
 			LOGGER.error("Error al setear nuevas propiedades, causa: ", e);

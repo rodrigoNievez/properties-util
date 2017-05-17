@@ -193,7 +193,9 @@ public class ManagePropertiesFilesServiceImpl implements ManagePropertiesFilesSe
 		File file = new File(fileContainer);
 		try {
 			Properties fromProperties = fileManagerService.getProperties(from);
+			System.out.println(String.format("Total de propiedades archivo from: %d", fromProperties.size()));
 			Properties skipProperties = fileManagerService.getProperties(skipFile);
+			System.out.println(String.format("Total de propiedades archivo skip: %d", skipProperties.size()));
 			Scanner scanner = new Scanner(file);
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
